@@ -19,3 +19,8 @@ app.config['SQLALCHEMY_ECHO'] = True
 
 connect_db(app)
 db.create_all()
+
+@app.route('/')
+def landing():
+    """ """
+    return render_template("edit-user.html")

@@ -1,0 +1,12 @@
+.card-img-top {
+    width: 200px;
+    padding: 20px;
+}
+
+.card-text {
+    font-size: 1.8rem;
+}
+
+.edit-btn {
+    margin-right: 10px;
+}
