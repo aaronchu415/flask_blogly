@@ -2,14 +2,16 @@
 {% block title %}New User{% endblock %}
 {% block content %}
     <div class="card" style="width: 18rem;">
-        <img class="card-img-top" src="https://centrik.in/wp-content/uploads/2017/02/user-image-.png" alt="Card image cap">
+        <img class="card-img-top" src="{{user.image_url}}" alt="Card image cap">
         <div class="card-body">
             <p class="card-text">
-                <span id="first-name">First</span>
-                <span id="last-name">Last</span>
+                <span id="first-name">{{user.first_name}}</span>
+                <span id="last-name">{{user.last_name}}</span>
             </p>
-            <button class="btn-primary edit-btn">Edit</button>
-            <button class="btn-danger">Delete</button>
+            <a href="/users/{{user.id}}/edit" class="btn-primary edit-btn">Edit</a>
+            <form action="/users/{{user.id}}/delete" method="POST">
+                <button class="btn-danger">Delete</button>
+            </form>
         </div>
     </div>
 {% endblock %}
