@@ -14,16 +14,16 @@ def connect_db(app):
 class User(db.Model):
     """User Model"""
 
-    __tablename__ = "Users"
+    __tablename__ = "users"
 
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True)
-    first_name = db.Column(db.String(50),
+    first_name = db.Column(db.Text,
                            nullable=False)
-    last_name = db.Column(db.String(50),
+    last_name = db.Column(db.Text,
                           nullable=False)
-    image_url = db.Column(db.String(200))
+    image_url = db.Column(db.Text)
 
     def __repr__(self):
         return f'<{self.id},{self.first_name},{self.last_name}>'
