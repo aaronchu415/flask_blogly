@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Blogly{% endblock %}
+{% block content %}
+    <div class="landing-container d-flex flex-column align-items-center">
+        <div class="h2 mb-3">Welcome to Blogly!</div>
+        <div class="mb-3 w-75 border-bottom">
+            <a href="/users" class="btn btn-primary mb-4">Go to Users</a>
+        </div>
+        <div class="h4 mb-3">Recent Posts</div>
+        {% for post, user in posts %}
+        <div class="card">
+            <div class="card-body text-white bg-secondary">
+                <h5 class="card-title">{{post.title}}</h5>
+                <p class="card-text">{{post.content}}</p>
+                <p class="card-text">By: {{user.first_name}} {{user.last_name}}</p>
+                <p class="card-text">{{post.created_at}}</p>
+            </div>
+        </div>
+    {% endfor %}
+    </div> 
+{% endblock %}

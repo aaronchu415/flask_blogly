@@ -1,18 +1,13 @@
 from flask import Flask, request, render_template, redirect
 from models import db, connect_db, User, Post
-from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy import desc
 
 app = Flask(__name__)
 
-app.config['SECRET_KEY'] = "SECRETTT"
-app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
-app.secret_key = "ADEFADEAA"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///blogly'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 
-debug = DebugToolbarExtension(app)
 connect_db(app)
 
 #creates tables in db if non exist.
@@ -25,7 +20,10 @@ db.create_all()
 @app.route('/')
 def landing():
     """Redirect to users list"""
-    return redirect("/users")
+    posts = db.session.query(Post, User).join(User).all()
+    posts.reverse()
+    #
+    return render_template("landing.html", posts=posts)
 
 
 @app.route('/users')
@@ -63,12 +61,8 @@ def process_new_user_request():
 def user_details(userid):
     """Navigate to a user's page"""
     user = User.query.get_or_404(userid)
-
     #get all post of current user
     posts = Post.query.filter_by(user_id=userid).all()
-
-    # import pdb; pdb.set_trace()
-
     if user.image_url == "" or user.image_url is None:
         user.image_url = "https://eliaslealblog.files.wordpress.com/2014/03/user-200.png?w=700"
     return render_template("user-detail.html", user=user, posts=posts)
@@ -123,12 +117,9 @@ def new_post_form(userid):
 @app.route('/users/<int:userid>/posts', methods=["POST"])
 def process_new_post_request(userid):
     """ Process new post into db"""
-
     # get data from post form
     post_title = request.form.get("post-title")
     post_content = request.form.get("post-content")
-
-
     # create db object
     new_post = Post(user_id=userid,
                     title=post_title, content=post_content)
@@ -142,27 +133,44 @@ def process_new_post_request(userid):
 @app.route('/posts/<int:postid>')
 def show_post(postid):
     """Navigate to a user posts page"""
-    post = User.query.get_or_404(postid)
-
-    return render_template("post-detail.html", post=post)
-
-
-# @app.route('/posts/<int:postid>/edit')
-# def edit_post_form(postid):
-#     """ """
-#     #
-#     return
+    post = Post.query.get_or_404(postid)
+    user = User.query.get_or_404(post.user_id)
+    return render_template("post-detail.html", post=post, user=user)
 
 
-# @app.route('/posts/<int:postid>/edit', methods=["POST"])
-# def process_edit_post_request(postid):
-#     """ """
-#     #
-#     return
+@app.route('/posts/<int:postid>/edit')
+def edit_post_form(postid):
+    """Show edit post form"""
+    #
+    post = Post.query.get_or_404(postid)
+    user = User.query.get_or_404(post.user_id)
+
+    return render_template("edit-post.html", post=post, user=user)
 
 
-# @app.route('/posts/<int:postid>/delete', methods=["POST"])
-# def process_delete_post_request(postid):
-#     """ """
-#     #
-#     return
+@app.route('/posts/<int:postid>/edit', methods=["POST"])
+def process_edit_post_request(postid):
+    """Process edit user form"""
+    # get data from post form
+    new_title = request.form.get("post-title")
+    new_content = request.form.get("post-content")
+    #
+    post = Post.query.get_or_404(postid)
+    post.title = new_title
+    post.content = new_content
+    #
+    db.session.commit()
+    #
+    return redirect(f"/posts/{postid}")
+
+
+@app.route('/posts/<int:postid>/delete', methods=["POST"])
+def process_delete_post_request(postid):
+    """Remove specified post from db"""
+    #
+    post = Post.query.get_or_404(postid)
+    userid = post.user_id
+    db.session.delete(post)
+    db.session.commit()
+    #
+    return redirect(f"/users/{userid}")

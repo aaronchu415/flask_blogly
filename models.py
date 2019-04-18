@@ -39,13 +39,15 @@ class Post(db.Model):
                    primary_key=True,
                    autoincrement=True)
     user_id = db.Column(db.Integer,
-                           db.ForeignKey("users.id")) 
+                        db.ForeignKey("users.id")) 
     title = db.Column(db.Text,
-                           nullable=False)
+                      nullable=False)
     content = db.Column(db.Text,
-                          nullable=False)
+                        nullable=False)
     created_at = db.Column(db.DateTime,
-                          default=datetime.datetime.utcnow)
+                           default=datetime.datetime.utcnow().strftime('%b %d %Y %H:%M:%S'))
+
+    user = db.relationship('User', backref='posts')
 
     def __repr__(self):
         return f'<{self.id},{self.title},{self.content}>'

@@ -10,7 +10,12 @@
 </head>
 <body>
     <nav class="navbar navbar-dark bg-dark mb-4">
-            <a class="navbar-brand" href="/users">Blogly</a>
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">Blogly</a>
+                <a class="nav-item text-white ml-3" href="/users">Users</a>
+            </div>
+        </div>
     </nav>
     <div class="container">
         {% block content %}BODY CONTENT GOES HERE{% endblock %}

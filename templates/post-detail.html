@@ -1,29 +1,12 @@
 {% extends 'base.html' %}
 {% block title %}Post Page{% endblock %}
 {% block content %}
-<div class="card mt-3 p-3">
-    <img class="card-img-top" src="{{user.image_url}}" alt="Card image cap">
-    <div class="card-body">
-        <p class="card-text h3 mb-3">
-            <span id="first-name">{{user.first_name}}</span>
-            <span id="last-name">{{user.last_name}}</span>
-        </p>
-        <a href="/users/{{user.id}}/edit" class="btn btn-primary btn-sm">Edit</a>
-        <form class="d-inline" action="/users/{{user.id}}/delete" method="POST">
-            <button class="btn btn-danger btn-sm">Delete</button>
-        </form>
-        {% if posts|length > 0 %}
-        <div class="posts-container">
-            <!-- container to hide/make visible -->
-            <div class="h4 mt-3">Posts</div>
-            <div class="posts mb-3">
-                {% for post in posts %}
-                <a href="/post/{{post.id}}">{{post.title}}</a>
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
-        <a href="/users/{{user.id}}/posts/new" class="btn btn-primary btn-sm">New Post</a>
-    </div>
-</div>
+    <div class="h2">{{post.title}}</div>
+    <p class="">{{post.content}}</p>
+    <p>By: {{user.first_name}} {{user.last_name}}</p>
+    <a class="btn btn-secondary" href="/users/{{user.id}}">Back</a>
+    <a class="btn btn-primary" href="/posts/{{post.id}}/edit">Edit</a>
+    <form action="/posts/{{post.id}}/delete" method="POST">
+        <button class="btn btn-danger" type="submit">Delete</button>
+    </form>
 {% endblock %}

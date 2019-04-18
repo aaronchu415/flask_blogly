@@ -1,7 +1,16 @@
+.landing-container {
+    text-align: center;
+}
+
 .card {
     margin: 0 auto;
     width: 400px;
     text-align: center;
+}
+
+.landing-container .card {
+    width: 600px;
+    margin-bottom: 20px;
 }
 
 .card-img-top {
@@ -14,8 +23,4 @@
     width: 60%;
     margin: 0 auto;
     list-style: none;
-}
-
-.posts a {
-    display: block;
 }
