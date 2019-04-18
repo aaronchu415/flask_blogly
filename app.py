@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, redirect
-from models import db, connect_db, User, Post
+from models import db, connect_db, User, Post, Tag, PostTag
 from sqlalchemy import desc
 
 app = Flask(__name__)
@@ -174,3 +174,25 @@ def process_delete_post_request(postid):
     db.session.commit()
     #
     return redirect(f"/users/{userid}")
+
+
+##################################################
+
+
+@app.route('/tags')
+def tags_page():
+    """Show list of Tags"""
+
+    # get Tags from database
+    list_of_tags = Tag.query.all()
+    return render_template("tag-list.html", tags=list_of_tags)
+
+@app.route('/tags/<int:tagid>')
+def tag_details(tagid):
+    """Navigate to a tags's page"""
+    #get tag from db
+    tag = Tag.query.get_or_404(tagid)
+
+    posts_related_to_tag = tag.posts
+
+    return render_template("show-tag.html", tag=tag, posts=posts_related_to_tag)

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Tag - Posts{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mt-3">
+    <div class="h2 pl-4">{{tag.name}}</div>
+    <div>
+        <a class="btn btn-primary d-block mb-1 btn-sm" href="#">Edit</a>
+        <a class="btn btn-danger d-block mb-1 btn-sm" href="#">Delete</a>
+    </div>
+</div>
+<ul class="list-group list-group-flush mt-1 mb-5">
+    {% for post in posts %}
+    <li class="list-group-item">
+        <a href="/posts/{{post.id}}">{{post.title}}</a>
+    </li>
+    {% endfor %}
+
+</ul>
+{% endblock %}

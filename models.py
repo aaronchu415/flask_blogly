@@ -49,5 +49,45 @@ class Post(db.Model):
 
     user = db.relationship('User', backref='posts')
 
+    # direct navigation: post -> post_tag & back
+    post_tag = db.relationship('PostTag',
+                               backref='posts')
+
+    tags = db.relationship('Tag',
+                           secondary="posts_tags",
+                           backref='posts')
+
     def __repr__(self):
         return f'<{self.id},{self.title},{self.content}>'
+
+
+class Tag(db.Model):
+    """User Model"""
+
+    __tablename__ = "tags"
+
+    id = db.Column(db.Integer,
+                   primary_key=True,
+                   autoincrement=True)
+    name = db.Column(db.Text,
+                     nullable=False)
+    
+    # direct navigation: post -> post_tag & back
+    post_tag = db.relationship('PostTag',
+                               backref='tags')
+
+
+class PostTag(db.Model):
+    """Mapping of a tag to post."""
+
+    __tablename__ = "posts_tags"
+
+    id = db.Column(db.Integer,
+                   primary_key=True,
+                   autoincrement=True)
+
+    post_id = db.Column(db.Integer,
+                        db.ForeignKey("posts.id"))
+    tag_id = db.Column(db.Integer,
+                       db.ForeignKey("tags.id"))
+                
