@@ -1,5 +1,6 @@
 """Models for Blogly."""
 
+import datetime
 from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
@@ -37,12 +38,14 @@ class Post(db.Model):
     id = db.Column(db.Integer,
                    primary_key=True,
                    autoincrement=True)
+    user_id = db.Column(db.Integer,
+                           db.ForeignKey("users.id")) 
     title = db.Column(db.Text,
                            nullable=False)
     content = db.Column(db.Text,
                           nullable=False)
     created_at = db.Column(db.DateTime,
-                          nullable=False)
+                          default=datetime.datetime.utcnow)
 
     def __repr__(self):
         return f'<{self.id},{self.title},{self.content}>'

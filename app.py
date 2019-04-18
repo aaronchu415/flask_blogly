@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template, redirect
-from models import db, connect_db, User
+from models import db, connect_db, User, Post
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy import desc
 
@@ -14,7 +14,9 @@ app.config['SQLALCHEMY_ECHO'] = True
 
 debug = DebugToolbarExtension(app)
 connect_db(app)
-# db.create_all()
+
+#creates tables in db if non exist.
+db.create_all()
 
 
 ##################################################
@@ -61,9 +63,15 @@ def process_new_user_request():
 def user_details(userid):
     """Navigate to a user's page"""
     user = User.query.get_or_404(userid)
+
+    #get all post of current user
+    posts = Post.query.filter_by(user_id=userid).all()
+
+    # import pdb; pdb.set_trace()
+
     if user.image_url == "" or user.image_url is None:
         user.image_url = "https://eliaslealblog.files.wordpress.com/2014/03/user-200.png?w=700"
-    return render_template("user-detail.html", user=user)
+    return render_template("user-detail.html", user=user, posts=posts)
 
 
 @app.route('/users/<int:userid>/edit')
@@ -112,18 +120,31 @@ def new_post_form(userid):
     return render_template("new-post.html", user=user)
 
 
-# @app.route('/users/<int:userid>/posts', methods=["POST"])
-# def process_new_post_request(userid):
-#     """ """
-#     #
-#     return
+@app.route('/users/<int:userid>/posts', methods=["POST"])
+def process_new_post_request(userid):
+    """ Process new post into db"""
+
+    # get data from post form
+    post_title = request.form.get("post-title")
+    post_content = request.form.get("post-content")
 
 
-# @app.route('/posts/<int:postid>')
-# def show_post(postid):
-#     """ """
-#     #
-#     return
+    # create db object
+    new_post = Post(user_id=userid,
+                    title=post_title, content=post_content)
+    # add to db and commit
+    db.session.add(new_post)
+    db.session.commit()
+    #
+    return redirect(f"/users/{userid}")
+
+
+@app.route('/posts/<int:postid>')
+def show_post(postid):
+    """Navigate to a user posts page"""
+    post = User.query.get_or_404(postid)
+
+    return render_template("post-detail.html", post=post)
 
 
 # @app.route('/posts/<int:postid>/edit')
