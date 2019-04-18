@@ -1,17 +1,26 @@
 {% extends 'base.html' %}
 {% block title %}New User{% endblock %}
 {% block content %}
-    <div class="card" style="width: 18rem;">
+    <div class="card mt-3 p-3">
         <img class="card-img-top" src="{{user.image_url}}" alt="Card image cap">
         <div class="card-body">
-            <p class="card-text">
+            <p class="card-text h3 mb-3">
                 <span id="first-name">{{user.first_name}}</span>
                 <span id="last-name">{{user.last_name}}</span>
             </p>
-            <a href="/users/{{user.id}}/edit" class="btn-primary edit-btn">Edit</a>
-            <form action="/users/{{user.id}}/delete" method="POST">
-                <button class="btn-danger">Delete</button>
+            <a href="/users/{{user.id}}/edit" class="btn btn-primary btn-sm">Edit</a>
+            <form class="d-inline" action="/users/{{user.id}}/delete" method="POST">
+                <button class="btn btn-danger btn-sm">Delete</button>
             </form>
+            <div class="posts-container"> <!-- container to hide/make visible -->
+                <div class="h4 mt-3">Posts</div>
+                <div class="posts mb-3">
+                    <a href="">First Post</a>
+                    <a href="">Second Post</a>
+                    <a href="">Third Post</a>
+                </div>
+            </div>
+            <a href="/users/{{user.id}}/posts/new" class="btn btn-primary btn-sm">New Post</a>
         </div>
     </div>
 {% endblock %}

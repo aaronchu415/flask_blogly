@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Blogly{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mt-3">
+    <div class="h2">Users</div>
+    <a class="btn btn-primary d-block mb-1 btn-sm" href="/users/new">Add User</a>
+</div>
+<ul class="list-group list-group-flush mt-1 mb-5">
+    {% for user in users %}
+    <li class="list-group-item">
+        <a href="/users/{{user.id}}">{{user.first_name}} {{user.last_name}}</a>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -1,12 +1,21 @@
+.card {
+    margin: 0 auto;
+    width: 400px;
+    text-align: center;
+}
+
 .card-img-top {
-    width: 200px;
+    width: 80%;
+    margin: 0 auto;
     padding: 20px;
 }
 
-.card-text {
-    font-size: 1.8rem;
+.card-body ul {
+    width: 60%;
+    margin: 0 auto;
+    list-style: none;
 }
 
-.edit-btn {
-    margin-right: 10px;
+.posts a {
+    display: block;
 }
